@@ -1,9 +1,24 @@
 # 公众号历史文章采集器
 
+[![tests](https://github.com/dunkong/wechat-history-collector/actions/workflows/test.yml/badge.svg)](https://github.com/dunkong/wechat-history-collector/actions/workflows/test.yml)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](requirements.txt)
+[![Star](https://img.shields.io/github/stars/dunkong/wechat-history-collector?style=social)](https://github.com/dunkong/wechat-history-collector)
+
 > 给一篇公众号文章链接，采集这个号的全部历史文章，本地存档、导出、正文归档。
 > 纯本机运行 · 不调用任何付费接口 · 数据只存本机 · 开源免费（MIT）
 
 一个 Windows 本地工具 + 通用 AI 技能（Skill）。通过微信电脑版抓包拿到临时凭证，翻页拉取公众号历史文章，存入本地 SQLite 并导出多格式文件。可以双击 `.bat` 用网页手动操作，也可以加载为 AI 技能后一句话让 AI 自动完成。
+
+> ⭐ **如果这个项目帮到了你，欢迎点个 Star 支持一下！** [→ GitHub](https://github.com/dunkong/wechat-history-collector)
+
+## 界面预览
+
+| 本地网页界面（点开看大图） |
+| :---: |
+| ![网页界面](docs/images/ui-full.png) |
+
+*上图为演示模式（`?demo=1`）下的脱敏界面，数据与真实采集结果无关。*
 
 ## 特性
 
@@ -83,10 +98,13 @@ wechat-history-collector/        # 仓库根 = Skill 根
 ├── requirements.txt            # 依赖
 ├── install.bat / start.bat / reset_network.bat
 ├── scripts/
-│   └── cli.py                  # 命令行/自动化统一入口（JSON 输出）
+│   ├── cli.py                  # 命令行/自动化统一入口（JSON 输出）
+│   └── validate_skill.py       # SKILL.md 规范校验（CI 用）
 ├── references/
 │   ├── workflow.md             # 工作流、CLI、API、字段
 │   └── troubleshooting.md      # 故障排查
+├── docs/images/                # README 截图（脱敏演示模式）
+├── .github/workflows/test.yml  # 多版本 Python 自动测试
 ├── core/
 │   ├── config.py               # 路径与常量
 │   ├── seed.py                 # 种子链接 → __biz（含占位符校验）
@@ -104,10 +122,14 @@ wechat-history-collector/        # 仓库根 = Skill 根
 ## 自测
 
 ```bash
-python test_pipeline.py     # 种子解析 / 消息解析 / 去重 / 导出 / 搜索
-python test_content.py      # 正文解析 / 存储 / 归档导出
 python test_seed_biz.py     # __biz 占位符校验
+python test_pipeline.py     # 种子解析 / 消息解析 / 去重 / 导出 / 搜索
+python test_collect.py      # getmsg 多页翻页 + 偏移递增
+python test_content.py      # 正文解析 / 存储 / 归档导出
+python scripts/validate_skill.py   # SKILL.md 规范校验
 ```
+
+推送到 GitHub 后，`.github/workflows/test.yml` 会在 Python 3.9 / 3.11 / 3.13 上自动跑以上测试。全部测试使用临时数据库与目录，**不读写真实采集数据**。
 
 ## 限制与免责声明
 
@@ -118,3 +140,9 @@ python test_seed_biz.py     # __biz 占位符校验
 ## License
 
 [MIT](LICENSE) © 2026
+
+---
+
+⭐ **觉得有用？点个 Star 让更多人看到** → [github.com/dunkong/wechat-history-collector](https://github.com/dunkong/wechat-history-collector)
+
+欢迎 Issue / PR 反馈问题与改进建议。
