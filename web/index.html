@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>公众号历史文章采集</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>公众号历史文章采集</h1>
+    <p class="sub">本地运行 · 全程免费 · 数据只存本机</p>
+  </header>
+
+  <div id="netBanner" class="net-banner" style="display:none"></div>
+
+  <section class="card">
+    <div class="step-head"><span class="num">1</span><h2>粘贴种子文章链接</h2></div>
+    <p class="hint">任意一篇该公众号的文章链接即可，工具会提取账号标识。</p>
+    <div class="row">
+      <input id="seedUrl" placeholder="https://mp.weixin.qq.com/s/...">
+      <button id="btnSeed" class="primary">解析</button>
+    </div>
+    <div id="seedResult" class="result-line"></div>
+    <div class="row" id="nameRow" style="display:none">
+      <input id="acctName" placeholder="公众号名称（用于导出文件名，可留空）">
+      <button id="btnName">保存</button>
+    </div>
+  </section>
+
+  <section class="card" id="captureCard">
+    <div class="step-head"><span class="num">2</span><h2>抓包获取临时凭证</h2></div>
+    <p class="hint">点「开始抓包」后，复制生成的链接到 <b>微信电脑版的文件传输助手</b>，在微信里点开它。工具会自动截获凭证（约 30 分钟内有效）。</p>
+    <div class="row">
+      <button id="btnCapture" class="primary">开始抓包</button>
+      <button id="btnStop">停止并恢复代理</button>
+      <button id="btnReset" class="danger">一键恢复网络</button>
+    </div>
+    <div id="proxyTip" class="tip" style="display:none"></div>
+    <div id="profileBox" class="profile-box" style="display:none">
+      <label>在微信里打开这个链接：</label>
+      <div class="row">
+        <input id="profileUrl" readonly>
+        <button id="btnCopy">复制链接</button>
+      </div>
+      <p class="hint" id="captureWait">等待凭证…（打开链接后会自动检测）</p>
+    </div>
+    <div id="captureStatus" class="status-line"></div>
+  </section>
+
+  <section class="card">
+    <div class="step-head"><span class="num">3</span><h2>采集历史文章</h2></div>
+    <p class="hint">凭证抓到后即可翻页拉取，自动去重入库。会一直翻到微信返回「没有更多」为止。</p>
+    <div class="row">
+      <label class="inline-label">最多翻</label>
+      <input id="maxPages" type="number" value="500" min="1" max="3000" style="width:90px">
+      <label class="inline-label">页（每页约 10-20 篇，0=尽量拉全）</label>
+      <button id="btnCollect" class="primary">开始采集</button>
+      <button id="btnCollectPause" style="display:none">暂停</button>
+      <button id="btnCollectStop" class="danger" style="display:none">停止</button>
+      <span id="progressText" class="progress-text"></span>
+    </div>
+    <p class="hint" id="collectNote">实测该接口每页约 10-20 篇，多数公众号可翻到数百至上千篇。翻页会自动去重，可反复采集补全。采集中可暂停/停止，已采数据会保留。</p>
+    <div class="bar"><div id="progressBar"></div></div>
+    <div id="collectResult" class="result-line"></div>
+  </section>
+
+  <section class="card">
+    <div class="step-head"><span class="num">4</span><h2>查看与导出</h2></div>
+    <div class="row">
+      <input id="kw" placeholder="搜索标题/摘要…">
+      <button id="btnSearch">搜索</button>
+      <span class="spacer"></span>
+      <button id="btnXlsx" class="primary">Excel</button>
+      <button id="btnCsv">CSV</button>
+      <button id="btnHtml">HTML</button>
+      <button id="btnJson">JSON</button>
+    </div>
+    <div id="stat" class="stat"></div>
+    <div id="tableWrap" class="table-wrap"></div>
+  </section>
+
+  <section class="card" id="archiveCard">
+    <div class="step-head"><span class="num">5</span><h2>正文归档（可选）</h2></div>
+    <p class="hint">在第 4 步表格里勾选想要的文章（或点「全选」），点下面按钮抓取正文；抓完导出离线归档。</p>
+    <div class="row">
+      <button id="btnFetchContent" class="primary">抓取选中文章的正文</button>
+      <button id="btnContentPause" style="display:none">暂停</button>
+      <button id="btnContentStop" class="danger" style="display:none">停止</button>
+      <span id="contentProgress" class="progress-text"></span>
+    </div>
+    <div class="bar" id="contentBarWrap"><div id="contentBar"></div></div>
+    <div id="contentResult" class="result-line"></div>
+    <div class="row" style="margin-top:10px">
+      <button id="btnArcHtml">导出归档 HTML（带目录搜索）</button>
+      <button id="btnArcZip">导出正文 Markdown ZIP</button>
+      <input id="arcKw" placeholder="只导出标题/正文含此词（可选）">
+    </div>
+  </section>
+
+  <footer>
+    <p>说明：本工具仅采集公开文章，数据供个人存档研究使用，请遵守微信相关协议与版权要求。</p>
+  </footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

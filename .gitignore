@@ -1,0 +1,23 @@
+# 运行时数据（含隐私：凭证 Cookie、采集的数据库、日志）——绝不入库
+data/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 打包/分发产物
+dist/
+build/
+*.zip
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 平台本地数据（如各 AI Agent 的项目数据目录）
+.workbuddy/
