@@ -147,8 +147,19 @@ $('btnCollectStop').onclick = async () => {
   setLine('collectResult','正在停止…','');
 };
 
+// 演示模式：URL 带 ?demo=1 时用脱敏示例数据渲染，便于文档截图/快速预览，不读取真实数据库
+const DEMO_MODE = new URLSearchParams(location.search).get('demo') === '1';
+const DEMO_ROWS = [
+  {id:1, publish_time:'2026-11-18 09:30', title:'示例文章：如何用 AI 提升写作效率', url:'https://mp.weixin.qq.com/', content_status:'ok'},
+  {id:2, publish_time:'2026-11-15 20:10', title:'示例文章：一份给新手的入门指南', url:'https://mp.weixin.qq.com/', content_status:'ok'},
+  {id:3, publish_time:'2026-11-12 08:00', title:'示例文章：聊聊最近的一点心得', url:'https://mp.weixin.qq.com/', content_status:'ok'},
+  {id:4, publish_time:'2026-11-08 18:45', title:'示例文章：三个值得收藏的小技巧', url:'https://mp.weixin.qq.com/', content_status:''},
+  {id:5, publish_time:'2026-11-03 12:20', title:'示例文章：从零开始完整实践记录', url:'https://mp.weixin.qq.com/', content_status:''},
+  {id:6, publish_time:'2026-10-28 07:15', title:'示例文章：常见问题一次讲清楚', url:'https://mp.weixin.qq.com/', content_status:''},
+];
+
 async function loadArticles(kw=''){
-  const rows = await api('/api/articles'+(kw?'?keyword='+encodeURIComponent(kw):''));
+  const rows = DEMO_MODE ? DEMO_ROWS : await api('/api/articles'+(kw?'?keyword='+encodeURIComponent(kw):''));
   $('stat').textContent = `共 ${rows.length} 篇` + (kw?'（搜索结果）':'');
   if (!rows.length) { $('tableWrap').innerHTML='<div style="padding:20px;color:#999;font-size:13px">暂无文章，先完成采集</div>'; return; }
   let h = '<table><thead><tr><th style="width:34px"><input type="checkbox" id="chkAll" title="全选/取消"></th><th style="width:120px">发布时间</th><th>标题</th><th style="width:78px">正文</th></tr></thead><tbody>';
